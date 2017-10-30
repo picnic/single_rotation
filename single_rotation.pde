@@ -5,30 +5,44 @@ final int draw_size = 10;
 final int delay_ms = 100;
 final int colors_count = 4;
 final color[] colors = {
-  color(255, 0, 0), 
-  color(255, 255, 0), 
-  color(255, 0, 255), 
-  color(0, 255, 0)
+  color(80, 32, 0), 
+  color(112, 158, 58), 
+  color(215, 237, 169), 
+  color(216, 137, 26),
+  color(69, 114, 87)
 };
 int[][] grid;
 int odd;
 boolean paused;
 int particule_counter;
 
-
-void setup() {
-  size(1, 1);
-  surface.setResizable(true);
-  surface.setSize(width*draw_size, height*draw_size);
-  grid = new int[width][height];
+void init_grid() {
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < width; y++) {
       grid[x][y] = 0;
     }
   }
+}
+
+void init_test_data() {
+  toggleCell(10, 10);
+  toggleCell(11, 10);
+  toggleCell(9, 11);
+  toggleCell(10, 11);
+  toggleCell(11, 11);
+  toggleCell(12, 11);
+}
+
+void setup() {
+  size(1, 1);
+  surface.setResizable(true);
+  surface.setSize(width*draw_size, height*draw_size);
   odd = 0;
   paused = true;
   particule_counter = 1;
+  grid = new int[width][height];
+  init_grid();
+  init_test_data();
 }
 
 int is_particule(int cell) {
@@ -68,7 +82,7 @@ void update_grid() {
 }
 
 void draw() {
-  background(0);
+  background(255);
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < width; y++) {
       if (grid[x][y] > 0) {
@@ -83,14 +97,22 @@ void draw() {
   }
 }
 
-void mousePressed() {
-  int x = mouseX/draw_size;
-  int y = mouseY/draw_size;
+void toggleCell(int x, int y) {
   if (grid[x][y] > 0) grid[x][y] = 0;
   else grid[x][y] = particule_counter;
   particule_counter++;
 }
 
+void mousePressed() {
+  int x = mouseX/draw_size;
+  int y = mouseY/draw_size;
+  toggleCell(x, y);
+}
+
 void keyPressed() {
-  paused = !paused;
+  if (key == ' ') {
+    paused = !paused;
+  } else if (key == 'c') {
+    init_grid();
+  }
 }
